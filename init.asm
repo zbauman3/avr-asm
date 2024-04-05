@@ -12,29 +12,32 @@
 	.cseg
 	.org	0x00
 
-	cli			     ; disable interrupts
-	ldi	mask,(1<<CLKPCE)
-	out	CLKPR,mask
-	ldi	mask,0b00000000
-	out	CLKPR,mask
-	sei			     ; enabled interrupts
+	cli							; disable interrupts
+	ldi		mask,(1<<CLKPCE)	; load 10000000 into mask register
+	out		CLKPR,mask			; enable editing clock prescale register
+	ldi		mask,0b00000000		; load 00000000 into mask register
+	out		CLKPR,mask			; no division factor for clock
+	sei							; enabled interrupts
 	
-	clr	ledR			; clear led register
-	ldi	mask,(1<<PINB0)		; load 00000001 into mask register
-	out	DDRB,mask		; set PINB0 to output
+	clr		ledR				; clear led register
+	ldi		mask,(1<<PINB0)		; load 00000001 into mask register
+	out		DDRB,mask			; set PINB0 to output
 
-start:	eor	ledR,mask		; toggle PINB0 in led register
-	out	PORTB,ledR		; write led register to PORTB
+start:
+	eor		ledR,mask			; toggle PINB0 in led register
+	out		PORTB,ledR			; write led register to PORTB
 
-	ldi	oLoopR,oVal		; initialize outer loop count
+	ldi		oLoopR,oVal			; initialize outer loop count
 
-oLoop:	ldi	iLoopRl,LOW(iVal)	; intialize inner loop count in inner
-	ldi	iLoopRh,HIGH(iVal)	; loop high and low registers
+oLoop:
+	ldi		iLoopRl,LOW(iVal)	; intialize inner loop count in inner
+	ldi		iLoopRh,HIGH(iVal)	; loop high and low registers
 
-iLoop:	sbiw	iLoopRl,1		; decrement inner loop registers
-	brne	iLoop			; branch to iLoop if iLoop registers != 0
+iLoop:
+	sbiw	iLoopRl,1			; decrement inner loop registers
+	brne	iLoop				; branch to iLoop if iLoop registers != 0
 
-	dec	oLoopR			; decrement outer loop register
-	brne	oLoop			; branch to oLoop if outer loop register != 0
+	dec		oLoopR				; decrement outer loop register
+	brne	oLoop				; branch to oLoop if outer loop register != 0
 
-	rjmp	start			; jump back to start
+	rjmp	start				; jump back to start
