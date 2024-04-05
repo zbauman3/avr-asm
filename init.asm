@@ -12,14 +12,14 @@
 	.cseg
 	.org	0x00
 
-        cli                             ; disable interrupts
-        ldi	mask,(1<<CLKPCE)
-        out	CLKPR,mask
-        ldi	mask,0b00000000
-        out	CLKPR,mask
-        sei                             ; enabled interrupts
+	cli			     ; disable interrupts
+	ldi	mask,(1<<CLKPCE)
+	out	CLKPR,mask
+	ldi	mask,0b00000000
+	out	CLKPR,mask
+	sei			     ; enabled interrupts
 	
-        clr	ledR			; clear led register
+	clr	ledR			; clear led register
 	ldi	mask,(1<<PINB0)		; load 00000001 into mask register
 	out	DDRB,mask		; set PINB0 to output
 
