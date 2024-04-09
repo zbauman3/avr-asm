@@ -11,13 +11,6 @@
 
 	.cseg
 	.org	0x00
-
-	cli							; disable interrupts
-	ldi		mask,(1<<CLKPCE)	; load 10000000 into mask register
-	out		CLKPR,mask			; enable editing clock prescale register
-	ldi		mask,0b00000000		; load 00000000 into mask register
-	out		CLKPR,mask			; no division factor for clock
-	sei							; enabled interrupts
 	
 	clr		ledR				; clear led register
 	ldi		mask,(1<<PINB0)		; load 00000001 into mask register
@@ -34,7 +27,7 @@ oLoop:
 	ldi		iLoopRh,HIGH(iVal)	; loop high and low registers
 
 iLoop:
-	sbiw	iLoopRl,1			; decrement inner loop registers
+	sbiw	iLoopRh:iLoopRl,1	; decrement inner loop registers
 	brne	iLoop				; branch to iLoop if iLoop registers != 0
 
 	dec		oLoopR				; decrement outer loop register
