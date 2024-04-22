@@ -9,7 +9,6 @@
 # Set clock speed to 1MHz
 # avrdude -v -pattiny85 -cusbtiny -B8 -e -Ulfuse:w:0b01100010:m
 
-
 if [ $# -eq 0 ];
 then
 	echo "Enter a script name (i.e. \"init\" for \"init.asm\")";
