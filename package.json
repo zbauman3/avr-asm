@@ -1,0 +1,15 @@
+{
+    "name": "avr-asm",
+    "version": "1.0.0",
+    "description": "AVR assembly playground",
+    "main": "index.js",
+    "scripts": {
+        "upload": "node ./scripts/upload.js",
+        "setFuses": "node ./scripts/setFuses.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "yargs": "^17.7.2"
+    }
+}
