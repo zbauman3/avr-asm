@@ -44,7 +44,7 @@ wipeAll:
 wipeAllLow:
     rcall   sendDisp
     ldi     XH,0b00000000
-    ldi     XL,0b00001111
+    ldi     XL,0b00111111
     rcall   sleepMillis
     cpi     dispL,0b10000000
     breq    wipeAllSetupHigh
@@ -57,7 +57,7 @@ wipeAllSetupHigh:
 wipeAllHigh:
     rcall   sendDisp
     ldi     XH,0b00000000
-    ldi     XL,0b00001111
+    ldi     XL,0b00111111
     rcall   sleepMillis
     cpi     dispH,0b10000000
     breq    wipeAll
