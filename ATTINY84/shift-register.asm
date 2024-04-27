@@ -15,7 +15,6 @@
     .def    dispL       = r18        ; display low byte
     .def    dispH       = r19        ; display high byte
     .def    sleepL      = r23        ; sleep loop counter
-    .def    sleepMult   = r24
 
     .equ    CLRB        = PINA0    
     .equ    SCLK        = PINA3        
@@ -24,8 +23,6 @@
 
     .cseg
     .org    0x00
-
-    rcall   readLFuse
 
     ; set pins to output
     ldi     mask1,(1<<CLRB) | (1<<SCLK) | (1<<RCLK) | (1<<DATA)
@@ -116,51 +113,4 @@ sleepOneSecond:
     ldi     XL,0b11101000
     rjmp    sleepMillis
 
-; sleeps for N milliseconds
-; N is defined by the values in XH:XL
-; this means the max is 65535ms
-; Timing is hard, and I don't have more time, so this adds some clock cycles:
-; 1MHz ads 19 clock cycles, 8MHz adds 12
-sleepMillis:
-    cpi     sleepMult,1
-    breq    sleepMillis8mhz
-    push    sleepMult
-    ldi     sleepMult,1
-    rjmp    sleepMillisStack
-sleepMillis8mhz:
-    push    sleepMult
-    ldi     sleepMult,8
-sleepMillisStack:
-    push    XL
-    push    XH
-sleepOuterLoop:
-    ldi     sleepL,0xF9
-sleepInnerLoop:
-    ; nop
-    dec     sleepL
-    brne    sleepInnerLoop
-    sbiw    XH:XL,1
-    brne    sleepOuterLoop
-    pop     XH
-    pop     XL
-    dec     sleepMult
-    brne    sleepMillisStack
-    pop     sleepMult
-    ret
-
-readLFuse:
-    ldi     ZH,0
-    ldi     ZL,0
-    ldi     mask1, (1<<RFLB)|(1<<SELFPRGEN)
-    out     SPMCSR,mask1
-    lpm     mask1,Z
-    ldi     sleepMult,0b10000000
-    and     sleepMult,mask1
-    cpi     sleepMult,0b10000000
-    breq    readLFuse8mhz
-    ldi     sleepMult,0
-    rjmp    readLFuseDone
-readLFuse8mhz:
-    ldi     sleepMult,1
-readLFuseDone:
-    ret
+.include "./shared/util.asm"
