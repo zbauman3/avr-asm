@@ -113,4 +113,4 @@ sleepOneSecond:
     ldi     XL,0b11101000
     rjmp    sleepMillis
 
-.include "./shared/util.asm"
+.include "./shared/sleep-1MHz.asm"
