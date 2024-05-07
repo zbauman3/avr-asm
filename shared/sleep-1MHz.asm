@@ -1,23 +1,40 @@
 
-#ifndef _ZANE_UTIL_
-#define _ZANE_UTIL_
+#ifndef _ZANE_SLEEP_
+#define _ZANE_SLEEP_
 
-; this assumes the clock is at 1MHz
-; sleeps for N milliseconds (+7µs - timing is hard)
-; N is defined by the values in XH:XL
-; this means the max is 65535.007ms
-sleepMillis:
+
+; This sleeps for N milliseconds where N = XH:XL. This works at 1MHz.
+; The timing accounts for an extra 5 clock cycles needed for loading data into
+; XH:XL and calling rjmp. So once this is called, it will sleep for Nms - 5µs.
+SLEEP_millis:
     push    r16
-sleep996us:
-    ldi     r16,0xF9
-sleep996usLoop:
+    ; remove 1 so that we can use the extra cycles for setup
+    sbiw    XH:XL,1
+    ; if only sleeping for 1, skip to make up the extra cycles
+    breq    SLEEP_millis_makeup
+    nop     ; even timing
+; the main sleep loop - each loop is 1ms
+SLEEP_millis_mainOuter:
+    ldi     r16,249
+SLEEP_millis_mainInner:
     nop
     dec     r16
-    brne    sleep996usLoop
+    brne    SLEEP_millis_mainInner
     sbiw    XH:XL,1
-    brne    sleep996us
+    brne    SLEEP_millis_mainOuter
+    nop     ; even timing
+; this makes up the extra clock cycles that were lost to setup
+SLEEP_millis_makeup:
+    ldi     r16,245
+    nop
+    nop
+    nop
+SLEEP_millis_makeupLoop:
+    nop
+    dec     r16
+    brne    SLEEP_millis_makeupLoop
+; cleanup
     pop     r16
     ret
 
-
-#endif  /* _ZANE_UTIL_ */
+#endif  /* _ZANE_SLEEP_ */

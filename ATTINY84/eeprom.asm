@@ -58,7 +58,7 @@ incrementShow:
     rcall   showData
     ldi     XH,0b00000011
     ldi     XL,0b11101000
-    rcall   sleepMillis
+    rcall   SLEEP_millis
     lsl     r18
     ret
 

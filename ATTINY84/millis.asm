@@ -18,31 +18,18 @@ start:
     rcall   MILLIS_setup
     rcall   SN74HC595N_setup
     rcall   SN74HC595N_clear
-    ldi     XH,0b00000000
-    ldi     XL,0b00100000
-    rcall   sleepMillis
 
 loopIt:
     rcall   MILLIS_get
 
-    ; mov     r16,r15
-    ; rcall   SN74HC595N_sendByte
-    ; mov     r16,r14
-    ; rcall   SN74HC595N_sendByte
-    ; rcall   SN74HC595N_show
-    ; ldi     XH,0b00000000
-    ; ldi     XL,0b00001111
-    ; rcall   sleepMillis
-
     mov     r16,r13
     rcall   SN74HC595N_sendByte
-    ; mov     r16,r12
-    ldi     r16,0
+    mov     r16,r12
     rcall   SN74HC595N_sendByte
     rcall   SN74HC595N_show
-    ldi     XH,0b00000001
-    ldi     XL,0b00000000
-    rcall   sleepMillis
+    ldi     XH,0b00000000
+    ldi     XL,0b00001000
+    rcall   SLEEP_millis
 
     rjmp    loopIt
 
