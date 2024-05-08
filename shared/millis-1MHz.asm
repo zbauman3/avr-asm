@@ -51,7 +51,17 @@ MILLIS_get:
 
 ; This sets up everything that is needed for the millis to work
 MILLIS_setup:
+    push    XH
+    push    XL
     push    r16
+    ; clear RAM
+    ldi     XH,MILLIS_DH
+    ldi     XL,MILLIS_DL
+    ldi     r16,0
+    st      X+,r16
+    st      X+,r16
+    st      X+,r16
+    st      X,r16
     ; use OCRA
     ldi     r16,(1<<WGM01)
     out     TCCR0A,r16
@@ -68,6 +78,8 @@ MILLIS_setup:
     ldi     r16,(1<<OCIE0A)
     out     TIMSK0,r16
     pop     r16
+    pop     XL
+    pop     XH
     ret
 
 ; This handles the interrupt and increments the counter

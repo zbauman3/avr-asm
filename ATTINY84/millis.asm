@@ -22,9 +22,10 @@ start:
 loopIt:
     rcall   MILLIS_get
 
-    mov     r16,r13
+    rcall   SN74HC595N_clear
+    mov     r16,r14
     rcall   SN74HC595N_sendByte
-    mov     r16,r12
+    mov     r16,r13
     rcall   SN74HC595N_sendByte
     rcall   SN74HC595N_show
     ldi     XH,0b00000000
