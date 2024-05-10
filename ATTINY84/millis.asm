@@ -1,11 +1,7 @@
     .include "tn84def.inc"
 
-    .equ    SN74HC595N_PORT     = PORTA
-    .equ    SN74HC595N_DDR      = DDRA
-    .equ    SN74HC595N_CLRB     = PINA0    
-    .equ    SN74HC595N_SCLK     = PINA3        
+    .equ    SN74HC595N_CLRB     = PINA0
     .equ    SN74HC595N_RCLK     = PINA2
-    .equ    SN74HC595N_DATA     = PINA1
 
     .cseg
     .org    0x00
